@@ -1,4 +1,4 @@
-import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import { HashRouter, MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
 import { DemoStoreProvider } from "./store/DemoStore";
 import { ToastProvider } from "./components/ui/Toast";
 import { AppLayout } from "./components/layout/AppLayout";
@@ -17,11 +17,14 @@ import Customers from "./pages/Customers";
 import EquipmentPage from "./pages/Equipment";
 import Reports from "./pages/Reports";
 
+// Dentro de um iframe (ex.: artefato publicado) a navegação fica em memória; no navegador, usa o hash da URL.
+const Router = import.meta.env.VITE_ROUTER === "memory" ? MemoryRouter : HashRouter;
+
 export default function App() {
   return (
     <DemoStoreProvider>
       <ToastProvider>
-        <HashRouter>
+        <Router>
           <Routes>
             <Route element={<AppLayout />}>
               <Route index element={<Dashboard />} />
@@ -41,7 +44,7 @@ export default function App() {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>
-        </HashRouter>
+        </Router>
       </ToastProvider>
     </DemoStoreProvider>
   );
